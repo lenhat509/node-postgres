@@ -1,0 +1,1 @@
+CREATE TABLE my_worlds (id SERIAL, name VARCHAR(50), description TEXT);
