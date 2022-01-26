@@ -47,9 +47,9 @@ describe("Testing my_worlds model", () => {
         }));
     });
     describe("Testing index function", () => {
-        it('Testing index, expecting to get all world', () => __awaiter(void 0, void 0, void 0, function* () {
+        it('Testing index, expecting to get 3 worlds', () => __awaiter(void 0, void 0, void 0, function* () {
             const result = yield store.index();
-            expect(result).toEqual([]);
+            expect(result.length).toEqual(3);
         }));
     });
     describe('Testing show function', () => {
@@ -58,9 +58,7 @@ describe("Testing my_worlds model", () => {
             expect(result.name).toEqual(dummyWorld[0].name);
         }));
         it('Expecting get an error', () => __awaiter(void 0, void 0, void 0, function* () {
-            expect(() => {
-                store.show(4);
-            }).toThrowError(Error);
+            yield expectAsync(store.show(4)).toBeRejectedWithError();
         }));
     });
     describe('Testing update function', () => {
@@ -73,8 +71,7 @@ describe("Testing my_worlds model", () => {
         it('Expecting get an error', () => __awaiter(void 0, void 0, void 0, function* () {
             const world = dummyWorld[0];
             world.description = "Climber get a ice spear";
-            const result = yield store.update(4, world);
-            expect(result).toThrowError();
+            yield expectAsync(store.update(4, world)).toBeRejectedWithError();
         }));
     });
     describe('Testing delete function', () => {
@@ -83,12 +80,10 @@ describe("Testing my_worlds model", () => {
             expect(result.name).toEqual(dummyWorld[0].name);
         }));
         it('Expecting an error, deleted world can not be found', () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield store.show(1);
-            expect(result).toThrowError();
+            yield expectAsync(store.show(1)).toBeRejectedWithError();
         }));
         it('Expecting an error, the world does not exist', () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield store.show(5);
-            expect(result).toThrowError();
+            yield expectAsync(store.show(5)).toBeRejectedWithError();
         }));
     });
 });

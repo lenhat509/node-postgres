@@ -38,9 +38,9 @@ describe("Testing my_worlds model", () => {
         })
     })
     describe("Testing index function", () => {
-        it('Testing index, expecting to get all world', async () => {
+        it('Testing index, expecting to get 3 worlds', async () => {
             const result = await store.index();
-            expect(result).toEqual([]);
+            expect(result.length).toEqual(3);
         })
     })
     describe('Testing show function', () => {
@@ -49,9 +49,7 @@ describe("Testing my_worlds model", () => {
             expect(result.name).toEqual(dummyWorld[0].name);
         })
         it('Expecting get an error', async() => {
-            expect(() => {
-                store.show(4)
-            }).toThrowError(Error);
+            await expectAsync(store.show(4)).toBeRejectedWithError();
         })
     })
     describe('Testing update function', () => {
@@ -64,8 +62,7 @@ describe("Testing my_worlds model", () => {
         it('Expecting get an error', async() => {
             const world: World = dummyWorld[0];
             world.description = "Climber get a ice spear";
-            const result = await store.update(4, world);
-            expect(result).toThrowError();
+            await expectAsync( store.update(4, world)).toBeRejectedWithError();
         })
     })
     describe('Testing delete function', () => {
@@ -74,12 +71,10 @@ describe("Testing my_worlds model", () => {
             expect(result.name).toEqual(dummyWorld[0].name);
         })
         it('Expecting an error, deleted world can not be found', async() => {
-            const result = await store.show(1);
-            expect(result).toThrowError();
+            await expectAsync(store.show(1)).toBeRejectedWithError();
         })
         it('Expecting an error, the world does not exist', async() => {
-            const result = await store.show(5);
-            expect(result).toThrowError();
+            await expectAsync(store.show(5)).toBeRejectedWithError();
         })
     })
     

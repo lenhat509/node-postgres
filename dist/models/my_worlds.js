@@ -22,7 +22,6 @@ class WorldStore {
                 const sql = 'SELECT * FROM my_worlds';
                 const result = yield connect.query(sql);
                 connect.release();
-                //console.log(result)
                 return result.rows;
             }
             catch (error) {
@@ -37,6 +36,9 @@ class WorldStore {
                 const sql = 'SELECT * FROM my_worlds WHERE id = ($1)';
                 const result = yield conn.query(sql, [id]);
                 conn.release();
+                if (result.rows[0] == undefined) {
+                    throw new Error('Invalid ID');
+                }
                 return result.rows[0];
             }
             catch (error) {
@@ -48,9 +50,8 @@ class WorldStore {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'INSERT INTO my_worlds (name, description) VALUES ($1, $2)';
+                const sql = 'INSERT INTO my_worlds (name, description) VALUES ($1, $2) RETURNING *';
                 const result = yield conn.query(sql, [world.name, world.description]);
-                console.log(result);
                 conn.release();
                 return result.rows[0];
             }
@@ -63,15 +64,11 @@ class WorldStore {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                // const get_sql = 'SELECT * FROM my_worlds WHERE id = ($1)'
-                // const get_result = await conn.query(get_sql, [id]);
-                // if(get_result.rows[0] == 'undefined')
-                //     throw new Error('Invalid ID');
-                const sql = 'UPDATE my_worlds SET name = $1 , description = $2 WHERE id = ($3)';
+                const sql = 'UPDATE my_worlds SET name = $1 , description = $2 WHERE id = ($3) RETURNING *';
                 const result = yield conn.query(sql, [world.name, world.description, id]);
-                if (result.rows[0] == 'undefined')
-                    throw new Error('Invalid ID');
                 conn.release();
+                if (result.rows[0] == undefined)
+                    throw new Error('Invalid ID');
                 return result.rows[0];
             }
             catch (error) {
@@ -83,11 +80,11 @@ class WorldStore {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();
-                const sql = 'DELETE FROM my_worlds WHERE id = ($1)';
+                const sql = 'DELETE FROM my_worlds WHERE id = ($1) RETURNING *';
                 const result = yield conn.query(sql, [id]);
-                if (result.rows[0] == 'undefined')
-                    throw new Error('Invalid ID');
                 conn.release();
+                if (result.rows[0] == undefined)
+                    throw new Error('Invalid ID');
                 return result.rows[0];
             }
             catch (error) {

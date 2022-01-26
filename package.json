@@ -8,7 +8,7 @@
     "lint": "eslint 'src/**/*.js'",
     "build": "npx tsc",
     "jasmine": "jasmine",
-    "test": "db-migrate down && db-migrate up && npm run build && npm run jasmine"
+    "test": "ENV=test db-migrate --env test up && npm run build && npm run jasmine && db-migrate db:drop test"
   },
   "author": "Nhat Le",
   "license": "ISC",
