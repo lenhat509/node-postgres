@@ -7,9 +7,9 @@ const index = async (req: Request, res: Response) => {
     try {
         const result = await store.index();
         res.json(result);
-    } catch (error) {
+    } catch (error: any) {
         res.status(400);
-        res.json(error);
+        res.json(error.message);
     }
 }
 
@@ -18,9 +18,9 @@ const show = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
         const result = await store.show(id);
         res.json(result);
-    } catch (error) {
+    } catch (error: any) {
         res.status(400);
-        res.json(error);
+        res.json(error.message);
     }
 }
 
@@ -30,9 +30,9 @@ const create = async (req: Request, res: Response) => {
         const description = req.body.description;
         const result = await store.create({id: 0, name, description});
         res.json(result);
-    } catch (error) {
+    } catch (error : any) {
         res.status(400);
-        res.json(error);
+        res.json(error.message);
     }
 }
 
@@ -43,9 +43,9 @@ const update = async (req: Request, res: Response) => {
         const description = req.body.description;
         const result = await store.update(id, {id, name, description});
         res.json(result);
-    } catch (error) {
+    } catch (error : any) {
         res.status(400);
-        res.json(error);
+        res.json(error.message);
     }
 }
 
@@ -54,9 +54,9 @@ const destroy = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
         const result = await store.delete(id);
         res.json(result)
-    } catch (error) {
+    } catch (error: any) {
         res.status(400);
-        res.json(error);
+        res.json(error.message);
     }
 }
 
